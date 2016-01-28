@@ -10,11 +10,13 @@ class Repository extends BaseRepository
 {
 	
 	protected $name;
+	protected $path;
 	protected $disk;
 	
-	public function __construct($name)
+	public function __construct($name, $path = 'config')
 	{
 		$this->name = $name;
+		$this->path = $path;
 		
 		parent::__construct(Config::get($name));
 	}
@@ -83,11 +85,30 @@ class Repository extends BaseRepository
 		return $response;
 	}
 	
+	protected function getCorePath()
+	{
+		$response = '';
+		
+		$name = $this->path;
+		
+		$parts = explode('.', $name);
+		
+		foreach ($parts AS $path)
+		{
+			if ($response != '') $response .= '/';
+			
+			$response .= $path;
+		}
+		
+		return $response;
+	}
+	
 	protected function getFile()
 	{
 		$file = $this->getCoreFile($this->name);
+		$path = $this->getCorePath($this->path);
 		
-		return base_path('config/'.$file.'.php');
+		return base_path($path.$file.'.php');
 	}
 	
 	protected function prepareContent($from, $validate = true)
