@@ -11,9 +11,9 @@ class Facade extends Config
      *
      * @return void
      */
-    public static function write($config, array $newValues = [], $validate = true)
+    public static function write($config, array $newValues = [], $validate = true, $path='config')
     {
-        $config = new Repository($config);
+        $config = new Repository($config, $path);
 	    
 	    foreach ($newValues AS $key => $value)
 	    {
